@@ -2,7 +2,6 @@ version: '2'
 services:
   sql-client:
     image: fhueske/flink-sql-client:latest
-    cpuset: "0"
     depends_on:
       - kafka
       - jobmanager
@@ -16,7 +15,6 @@ services:
       ES_HOST: elasticsearch
   jobmanager:
     image: flink:1.6.0-scala_2.11
-    cpuset: "1,2,3"
     hostname: "jobmanager"
     expose:
       - "6123"
@@ -27,7 +25,6 @@ services:
       - JOB_MANAGER_RPC_ADDRESS=jobmanager
   taskmanager:
     image: flink:1.6.0-scala_2.11
-    cpuset: "1,2,3"
     expose:
       - "6121"
       - "6122"
@@ -40,12 +37,10 @@ services:
       - JOB_MANAGER_RPC_ADDRESS=jobmanager
   zookeeper:
     image: wurstmeister/zookeeper
-    cpuset: "1,2,3"
     ports:
       - "2181:2181"
   kafka:
     image: wurstmeister/kafka:0.11.0.1
-    cpuset: "1,2,3"
     ports:
       - "9092"
     depends_on:
@@ -57,7 +52,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4
-    cpuset: "1,2,3"
     environment:
       - cluster.name=docker-cluster
       - bootstrap.memory_lock=true
@@ -75,9 +69,7 @@ services:
         hard: 65536
   kibana:
     image: docker.elastic.co/kibana/kibana-oss:6.2.4
-    cpuset: "1,2,3"
     depends_on:
       - elasticsearch
     ports:
       - "5601:5601"
-
