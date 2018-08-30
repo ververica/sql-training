@@ -4,9 +4,10 @@
 
 In this training you will learn to:
 
+* run SQL queries on streams.
 * use Flink's SQL CLI client.
-* run window aggregation and window join queries on event streams.
-* run queries on event streams that maintain a materialized view.
+* perform window aggregations and window joins with SQL queries.
+* specify a continuous SQL query that maintain a dynamic result table.
 * write the result of streaming SQL queries to Kafka and ElasticSearch.
 
 Please find the [training instructions](https://github.com/dataArtisans/sql-training/wiki) in the Wiki of this repository.
@@ -26,12 +27,17 @@ You don't need Java, Scala, or an IDE.
 
 Flink features multiple APIs with different levels of abstraction. SQL is supported by Flink as a unified API for batch and stream processing, i.e., queries are executed with the same semantics on unbounded, real-time streams or bounded, recorded streams and produce the same results. SQL on Flink is commonly used to ease the definition of data analytics, data pipelining, and ETL applications.
 
-The following example shows a SQL query that sessionizes a clickstream and counts the number of clicks per session. 
+The following example shows a SQL query that computes the number of departing taxi rides per hour. 
 
 ```sql
-SELECT userId, COUNT(*)
-FROM clicks
-GROUP BY SESSION(clicktime, INTERVAL '30' MINUTE), userId
+SELECT
+  TUMBLE_START(rowTime, INTERVAL '1' HOUR) AS t,
+  COUNT(*) AS cnt
+FROM TaxiRides
+WHERE
+  isStart
+GROUP BY 
+  TUMBLE(rowTime, INTERVAL '1' HOUR)
 ```
 
 ----
