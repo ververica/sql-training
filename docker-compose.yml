@@ -1,7 +1,7 @@
 version: '2'
 services:
   sql-client:
-    image: fhueske/flink-sql-client:latest
+    image: fhueske/flink-sql-client-training:1.7.2
     depends_on:
       - kafka
       - jobmanager
@@ -12,7 +12,7 @@ services:
       KAFKA_BOOTSTRAP: kafka
       ES_HOST: elasticsearch
   jobmanager:
-    image: flink:1.6.0-scala_2.11
+    image: flink:1.7.2-scala_2.12
     hostname: "jobmanager"
     expose:
       - "6123"
@@ -22,7 +22,7 @@ services:
     environment:
       - JOB_MANAGER_RPC_ADDRESS=jobmanager
   taskmanager:
-    image: flink:1.6.0-scala_2.11
+    image: flink:1.7.2-scala_2.12
     expose:
       - "6121"
       - "6122"
