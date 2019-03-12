@@ -6,7 +6,7 @@ In this training you will learn to:
 
 * run SQL queries on streams.
 * use Flink's SQL CLI client.
-* perform window aggregations and window joins with SQL queries.
+* perform window aggregations, stream joins, and pattern matching with SQL queries.
 * specify a continuous SQL query that maintain a dynamic result table.
 * write the result of streaming SQL queries to Kafka and ElasticSearch.
 
@@ -33,7 +33,7 @@ The following example shows a SQL query that computes the number of departing ta
 SELECT
   TUMBLE_START(rowTime, INTERVAL '1' HOUR) AS t,
   COUNT(*) AS cnt
-FROM TaxiRides
+FROM Rides
 WHERE
   isStart
 GROUP BY 
