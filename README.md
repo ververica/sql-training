@@ -10,7 +10,7 @@ In this training you will learn to:
 * specify a continuous SQL query that maintain a dynamic result table.
 * write the result of streaming SQL queries to Kafka and ElasticSearch.
 
-Please find the [training instructions](https://github.com/dataArtisans/sql-training/wiki) in the Wiki of this repository.
+Please find the [training instructions](https://github.com/ververica/sql-training/wiki) in the Wiki of this repository.
 
 ### Requirements
 
