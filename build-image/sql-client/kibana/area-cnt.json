@@ -1,0 +1,16 @@
+{
+  "settings" : {
+    "index" : {
+      "number_of_shards" : 3,
+      "number_of_replicas" : 2
+    }
+  },
+  "mappings": {
+    "ride": {
+      "properties": {
+        "areaId": { "type": "text" },
+        "cnt" : {"type": "long" }
+      }
+    }
+  }
+}

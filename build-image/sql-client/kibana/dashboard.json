@@ -1,0 +1,14 @@
+{
+  "attributes": {
+    "title": "Number of rides in area",
+    "hits": 0,
+    "description": "",
+    "panelsJSON": "[{\"panelIndex\":\"1\",\"gridData\":{\"x\":0,\"y\":0,\"w\":12,\"h\":7,\"i\":\"1\"},\"version\":\"6.2.4\",\"type\":\"visualization\",\"id\":\"989aaaa0-6a6e-11e8-b979-99e0045c82c0\"}]",
+    "optionsJSON": "{\"darkTheme\":false,\"useMargins\":true,\"hidePanelTitles\":false}",
+    "version": 1,
+    "timeRestore": false,
+    "kibanaSavedObjectMeta": {
+      "searchSourceJSON": "{\"query\":{\"query\":\"\",\"language\":\"lucene\"},\"filter\":[],\"highlightAll\":true,\"version\":true}"
+    }
+  }
+}
