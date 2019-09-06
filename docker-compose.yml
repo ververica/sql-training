@@ -1,7 +1,8 @@
-version: '2'
+version: '2.1'
 services:
   sql-client:
-    image: fhueske/flink-sql-client-training-1.7.2:latest
+    image: fhueske/flink-sql-training:1-FLINK-1.9-scala_2.11
+    command: "java -classpath /opt/data/data-producer.jar com.ververica.sql_training.data_producer.TaxiRecordProducer --input file /opt/data --output kafka kafka:9092 --speedup 10.0"
     depends_on:
       - kafka
       - jobmanager
@@ -12,7 +13,7 @@ services:
       KAFKA_BOOTSTRAP: kafka
       ES_HOST: elasticsearch
   jobmanager:
-    image: flink:1.7.2-scala_2.12
+    image: flink:1.9-scala_2.11
     hostname: "jobmanager"
     expose:
       - "6123"
@@ -22,7 +23,7 @@ services:
     environment:
       - JOB_MANAGER_RPC_ADDRESS=jobmanager
   taskmanager:
-    image: flink:1.7.2-scala_2.12
+    image: flink:1.9-scala_2.11
     expose:
       - "6121"
       - "6122"
@@ -34,11 +35,11 @@ services:
     environment:
       - JOB_MANAGER_RPC_ADDRESS=jobmanager
   zookeeper:
-    image: wurstmeister/zookeeper
+    image: wurstmeister/zookeeper:3.4.6
     ports:
       - "2181:2181"
   kafka:
-    image: wurstmeister/kafka:0.11.0.1
+    image: wurstmeister/kafka:2.12-2.2.1
     ports:
       - "9092"
     depends_on:
@@ -46,6 +47,7 @@ services:
     environment:
       HOSTNAME_COMMAND: "route -n | awk '/UG[ \t]/{print $$2}'"
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: "Rides:1:1, Fares:1:1, DriverChanges:1:1"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
   elasticsearch:

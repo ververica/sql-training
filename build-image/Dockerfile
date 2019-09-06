@@ -16,29 +16,53 @@
 # limitations under the License.
 ###############################################################################
 
-FROM flink:1.7.2-scala_2.12
+###############################################################################
+# Build Click Count Job
+###############################################################################
+
+FROM maven:3.6-jdk-8-slim AS builder
+
+# Get UDF code and compile it
+COPY ./java/sql-training-udfs /opt/sql-udfs
+RUN cd /opt/sql-udfs; \
+    mvn clean install
+
+# Get data producer code and compile it
+COPY ./java/sql-training-data-producer /opt/data-producer
+RUN cd /opt/data-producer; \
+    mvn clean install
+
+###############################################################################
+# Build SQL Playground Image
+###############################################################################
+
+FROM flink:1.9.0-scala_2.11
 
 ADD VERSION .
 
-WORKDIR /opt/sql-client
-
-ENV SQL_CLIENT_HOME /opt/sql-client
-
-# Copy sql-client dependencies
+# Copy sql-client configuration
 COPY sql-client/ /opt/sql-client
-COPY kafka-client /opt/kafka-client
 
+# Copy playground UDFs
+COPY --from=builder /opt/sql-udfs/target/sql-training-udfs-*.jar /opt/sql-client/lib/
+
+# Copy data producer
+COPY --from=builder /opt/data-producer/target/sql-training-data-producer-*.jar /opt/data/data-producer.jar
+
+# Copy configuration
+COPY conf/* /opt/flink/conf/
+
+# Download connector libraries
+RUN wget -P /opt/sql-client/lib/ http://central.maven.org/maven2/org/apache/flink/flink-json/${FLINK_VERSION}/flink-json-${FLINK_VERSION}.jar; \
+    wget -P /opt/sql-client/lib/ http://central.maven.org/maven2/org/apache/flink/flink-sql-connector-kafka_2.11/${FLINK_VERSION}/flink-sql-connector-kafka_2.11-${FLINK_VERSION}.jar; \
+    wget -P /opt/sql-client/lib/ http://central.maven.org/maven2/org/apache/flink/flink-sql-connector-elasticsearch6_2.11/${FLINK_VERSION}/flink-sql-connector-elasticsearch6_2.11-${FLINK_VERSION}.jar; \
 # Create data folders
-RUN mkdir -p /opt/data
-RUN mkdir -p /opt/data/kafka
-RUN mkdir -p /opt/data/batch
+    mkdir -p /opt/data; \
+    mkdir -p /opt/data/stream; \
+# Download data files
+    wget -O /opt/data/driverChanges.txt.gz 'https://drive.google.com/uc?export=download&id=1pf4tfv-YpoVQ9_O0948M8oXeCfVH-0MH'; \
+    wget -O /opt/data/fares.txt.gz 'https://drive.google.com/uc?export=download&id=1SriiwcIdMvY7uJsWSY4Hhh32iO3F4ND2'; \
+    wget -O /opt/data/rides.txt.gz 'https://drive.google.com/uc?export=download&id=1gY8W07OFvB7_4lHlAyingM4WQzs0_8lT';
 
-RUN apt-get update; apt-get -y install python2.7 && \
-    chmod +x /opt/sql-client/sql-client.sh && \
-    wget -P /opt/sql-client/lib/ http://central.maven.org/maven2/org/apache/flink/flink-json/${FLINK_VERSION}/flink-json-${FLINK_VERSION}.jar && \
-    wget -P /opt/sql-client/lib/ http://central.maven.org/maven2/org/apache/flink/flink-connector-kafka-0.11_2.12/${FLINK_VERSION}/flink-connector-kafka-0.11_2.12-${FLINK_VERSION}-sql-jar.jar && \
-    wget -P /opt/sql-client/lib/ http://central.maven.org/maven2/org/apache/flink/flink-connector-elasticsearch6_2.12/${FLINK_VERSION}/flink-connector-elasticsearch6_2.12-${FLINK_VERSION}-sql-jar.jar
-
-COPY docker-entrypoint.sh /
-# Configure container
-ENTRYPOINT ["/docker-entrypoint.sh"]
+WORKDIR /opt/sql-client
+ENV SQL_CLIENT_HOME /opt/sql-client

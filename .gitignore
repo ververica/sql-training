@@ -1,1 +1,3 @@
-build-image/sql-udfs/target
+**/target
+**/dependency-reduced-pom.xml
+**/.idea
