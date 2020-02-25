@@ -13,7 +13,7 @@ services:
       KAFKA_BOOTSTRAP: kafka
       ES_HOST: elasticsearch
   jobmanager:
-    image: flink:1.9-scala_2.11
+    image: flink:1.9.0-scala_2.11
     hostname: "jobmanager"
     expose:
       - "6123"
@@ -23,7 +23,7 @@ services:
     environment:
       - JOB_MANAGER_RPC_ADDRESS=jobmanager
   taskmanager:
-    image: flink:1.9-scala_2.11
+    image: flink:1.9.0-scala_2.11
     expose:
       - "6121"
       - "6122"
