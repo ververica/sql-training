@@ -1,7 +1,7 @@
 version: '2.1'
 services:
   sql-client:
-    image: fhueske/flink-sql-training:1-FLINK-1.9-scala_2.11
+    image: fhueske/flink-sql-training:1-FLINK-1.10-scala_2.11
     command: "java -classpath /opt/data/data-producer.jar com.ververica.sql_training.data_producer.TaxiRecordProducer --input file /opt/data --output kafka kafka:9092 --speedup 10.0"
     depends_on:
       - kafka
@@ -13,7 +13,7 @@ services:
       KAFKA_BOOTSTRAP: kafka
       ES_HOST: elasticsearch
   jobmanager:
-    image: flink:1.9.0-scala_2.11
+    image: flink:1.10.0-scala_2.11
     hostname: "jobmanager"
     expose:
       - "6123"
@@ -23,7 +23,7 @@ services:
     environment:
       - JOB_MANAGER_RPC_ADDRESS=jobmanager
   taskmanager:
-    image: flink:1.9.0-scala_2.11
+    image: flink:1.10.0-scala_2.11
     expose:
       - "6121"
       - "6122"

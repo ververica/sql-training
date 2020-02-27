@@ -36,7 +36,7 @@ RUN cd /opt/data-producer; \
 # Build SQL Playground Image
 ###############################################################################
 
-FROM flink:1.9.0-scala_2.11
+FROM flink:1.10.0-scala_2.11
 
 ADD VERSION .
 
@@ -53,9 +53,9 @@ COPY --from=builder /opt/data-producer/target/sql-training-data-producer-*.jar /
 COPY conf/* /opt/flink/conf/
 
 # Download connector libraries
-RUN wget -P /opt/sql-client/lib/ http://central.maven.org/maven2/org/apache/flink/flink-json/${FLINK_VERSION}/flink-json-${FLINK_VERSION}.jar; \
-    wget -P /opt/sql-client/lib/ http://central.maven.org/maven2/org/apache/flink/flink-sql-connector-kafka_2.11/${FLINK_VERSION}/flink-sql-connector-kafka_2.11-${FLINK_VERSION}.jar; \
-    wget -P /opt/sql-client/lib/ http://central.maven.org/maven2/org/apache/flink/flink-sql-connector-elasticsearch6_2.11/${FLINK_VERSION}/flink-sql-connector-elasticsearch6_2.11-${FLINK_VERSION}.jar; \
+RUN wget -P /opt/sql-client/lib/ https://repo.maven.apache.org/maven2/org/apache/flink/flink-json/${FLINK_VERSION}/flink-json-${FLINK_VERSION}.jar; \
+    wget -P /opt/sql-client/lib/ https://repo.maven.apache.org/maven2/org/apache/flink/flink-sql-connector-kafka_2.11/${FLINK_VERSION}/flink-sql-connector-kafka_2.11-${FLINK_VERSION}.jar; \
+    wget -P /opt/sql-client/lib/ https://repo.maven.apache.org/maven2/org/apache/flink/flink-sql-connector-elasticsearch6_2.11/${FLINK_VERSION}/flink-sql-connector-elasticsearch6_2.11-${FLINK_VERSION}.jar; \
 # Create data folders
     mkdir -p /opt/data; \
     mkdir -p /opt/data/stream; \
