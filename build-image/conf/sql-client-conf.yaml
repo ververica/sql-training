@@ -148,56 +148,6 @@ tables:
     primary-key: taxiId
     time-attribute: usageStartTime
 
-  - name: Sink_TenMinPsgCnts
-    type: sink
-    update-mode: append
-    schema: 
-    - name: cntStart
-      type: TIMESTAMP
-    - name: cntEnd
-      type: TIMESTAMP
-    - name: cnt
-      type: LONG
-    connector:
-      property-version: 1
-      type: kafka
-      version: universal
-      topic: TenMinPsgCnts
-      startup-mode: earliest-offset
-      properties:
-      - key: zookeeper.connect
-        value: zookeeper:2181
-      - key: bootstrap.servers
-        value: kafka:9092
-      - key: group.id
-        value: trainingGroup
-    format:
-      property-version: 1
-      type: json
-      schema: "ROW(cntStart TIMESTAMP, cntEnd TIMESTAMP, cnt LONG)"
-  - name: Sink_AreaCnts
-    type: sink
-    update-mode: upsert
-    schema: 
-    - name: areaId
-      type: INT
-    - name: cnt
-      type: LONG
-    connector:
-      type: elasticsearch
-      version: 6
-      hosts:
-        - hostname: "elasticsearch"
-          port: 9200
-          protocol: "http"
-      index: "area-cnts"
-      document-type: "areacnt"
-      key-delimiter: "$"
-    format:
-      property-version: 1
-      type: json
-      schema: "ROW(areaId INT, cnt LONG)"
-
 functions:
 - name: timeDiff
   from: class
@@ -219,6 +169,7 @@ functions:
 # Execution properties allow for changing the behavior of a table program.
 
 execution:
+  planner: blink               # using the Blink planner
   type: streaming              # 'batch' or 'streaming' execution
   result-mode: table           # 'changelog' or 'table' presentation of results
   parallelism: 1               # parallelism of the program

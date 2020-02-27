@@ -6,12 +6,12 @@ services:
     depends_on:
       - kafka
       - jobmanager
-      - elasticsearch
+      - mysql
     environment:
       FLINK_JOBMANAGER_HOST: jobmanager
       ZOOKEEPER_CONNECT: zookeeper
       KAFKA_BOOTSTRAP: kafka
-      ES_HOST: elasticsearch
+      MYSQL_HOST: mysql
   jobmanager:
     image: flink:1.10.0-scala_2.11
     hostname: "jobmanager"
@@ -52,20 +52,14 @@ services:
       KAFKA_CREATE_TOPICS: "Rides:1:1, Fares:1:1, DriverChanges:1:1"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.3.1
+  mysql:
+    image: mysql:8.0.19
+    command: --default-authentication-plugin=mysql_native_password
     environment:
-      - cluster.name=docker-cluster
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - discovery.type=single-node
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-      nofile:
-        soft: 65536
-        hard: 65536
+      MYSQL_USER: "flink"
+      MYSQL_PASSWORD: "secret"
+      MYSQL_DATABASE: "flinksql"
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+    volumes:
+      - ./mysql:/docker-entrypoint-initdb.d
+
