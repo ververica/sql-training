@@ -8,7 +8,7 @@ In this training you will learn to:
 * use Flink's SQL CLI client.
 * perform window aggregations, stream joins, and pattern matching with SQL queries.
 * specify a continuous SQL query that maintain a dynamic result table.
-* write the result of streaming SQL queries to Kafka and ElasticSearch.
+* write the result of streaming SQL queries to Kafka and MySQL.
 
 Please find the [training instructions](https://github.com/ververica/sql-training/wiki) in the Wiki of this repository.
 
