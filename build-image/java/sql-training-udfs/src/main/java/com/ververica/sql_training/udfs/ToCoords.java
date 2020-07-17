@@ -16,8 +16,7 @@
 
 package com.ververica.sql_training.udfs;
 
-import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.common.typeinfo.Types;
+import org.apache.flink.table.annotation.DataTypeHint;
 import org.apache.flink.table.functions.ScalarFunction;
 import org.apache.flink.types.Row;
 
@@ -27,17 +26,12 @@ import com.ververica.sql_training.udfs.util.GeoUtils;
  * Table API / SQL Scalar UDF to convert a cell ID into a lon/lat pair.
  */
 public class ToCoords extends ScalarFunction {
-	public Row eval(int cellId) {
+
+	@DataTypeHint("ROW<lon FLOAT, lat FLOAT>")
+	public Row eval(Integer cellId) {
 		return Row.of(
 				GeoUtils.getGridCellCenterLon(cellId),
 				GeoUtils.getGridCellCenterLat(cellId)
 		);
-	}
-
-	@Override
-	public TypeInformation getResultType(Class[] signature) {
-		return Types.ROW_NAMED(
-				new String[] {"lon", "lat"},
-				Types.FLOAT, Types.FLOAT);
 	}
 }

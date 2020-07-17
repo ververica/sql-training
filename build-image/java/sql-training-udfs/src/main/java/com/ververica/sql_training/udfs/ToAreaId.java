@@ -25,7 +25,7 @@ import com.ververica.sql_training.udfs.util.GeoUtils;
  */
 public class ToAreaId extends ScalarFunction {
 
-	public int eval(float lon, float lat) {
+	public int eval(Float lon, Float lat) {
 		return GeoUtils.mapToGridCell(lon, lat);
 	}
 }

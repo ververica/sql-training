@@ -149,9 +149,6 @@ tables:
     time-attribute: usageStartTime
 
 functions:
-- name: timeDiff
-  from: class
-  class: com.ververica.sql_training.udfs.TimeDiff
 - name: isInNYC
   from: class
   class: com.ververica.sql_training.udfs.IsInNYC

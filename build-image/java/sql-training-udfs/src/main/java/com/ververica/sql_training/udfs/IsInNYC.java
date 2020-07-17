@@ -25,7 +25,7 @@ import static com.ververica.sql_training.udfs.util.GeoUtils.isInNYC;
  */
 public class IsInNYC extends ScalarFunction {
 
-	public boolean eval(float lon, float lat) {
+	public boolean eval(Float lon, Float lat) {
 		return isInNYC(lon, lat);
 	}
 }

@@ -6,11 +6,11 @@
 
     <groupId>com.ververica.sql-training</groupId>
     <artifactId>sql-training-data-producer</artifactId>
-    <version>1-FLINK-1.10_2.11</version>
+    <version>1-FLINK-1.11_2.11</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <flink.version>1.10.0</flink.version>
+        <flink.version>1.11.0</flink.version>
         <kafka.version>2.2.0</kafka.version>
         <java.version>1.8</java.version>
         <scala.binary.version>2.11</scala.binary.version>
