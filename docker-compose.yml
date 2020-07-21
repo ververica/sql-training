@@ -1,19 +1,22 @@
 version: '2.1'
 services:
   sql-client:
-    image: fhueske/flink-sql-training:1-FLINK-1.11-scala_2.11
+    image: fhueske/flink-sql-training-client:1-FLINK-1.11-scala_2.11
+    build: ./images/client-image
     command: "java -classpath /opt/data/data-producer.jar com.ververica.sql_training.data_producer.TaxiRecordProducer --input file /opt/data --output kafka kafka:9092 --speedup 10.0"
     depends_on:
       - kafka
       - jobmanager
       - mysql
+      - minio
     environment:
       FLINK_JOBMANAGER_HOST: jobmanager
       ZOOKEEPER_CONNECT: zookeeper
       KAFKA_BOOTSTRAP: kafka
       MYSQL_HOST: mysql
   jobmanager:
-    image: flink:1.11.0-scala_2.11
+    image: fhueske/flink-sql-training-flink-s3:1.11.0-scala_2.11
+    build: ./images/flink-image
     hostname: "jobmanager"
     expose:
       - "6123"
@@ -23,7 +26,8 @@ services:
     environment:
       - JOB_MANAGER_RPC_ADDRESS=jobmanager
   taskmanager:
-    image: flink:1.11.0-scala_2.11
+    image: fhueske/flink-sql-training-flink-s3:1.11.0-scala_2.11
+    build: ./images/flink-image
     expose:
       - "6121"
       - "6122"
@@ -62,4 +66,14 @@ services:
       MYSQL_RANDOM_ROOT_PASSWORD: "yes"
     volumes:
       - ./mysql:/docker-entrypoint-initdb.d
-
+  minio:
+    image: minio/minio:latest
+    entrypoint: sh
+    command: -c 'mkdir -p /data/sql-training && /usr/bin/minio server /data'
+    environment:
+      - MINIO_ACCESS_KEY=flink-sql
+      - MINIO_SECRET_KEY=flink-sql
+    expose:
+      - "9000"
+    ports:
+      - "9000:9000"

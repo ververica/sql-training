@@ -175,6 +175,15 @@ execution:
   max-idle-state-retention: 0  # maximum idle state retention in ms
 
 #==============================================================================
+# Execution properties
+#==============================================================================
+
+# Flink configuration parameters
+
+configuration:
+  execution.checkpointing.interval: 1s
+
+#==============================================================================
 # Deployment properties
 #==============================================================================
 
