@@ -1,7 +1,7 @@
 version: '2.1'
 services:
   sql-client:
-    image: fhueske/flink-sql-training-client:1-FLINK-1.11-scala_2.11
+    image: fhueske/flink-sql-training-client:2-FLINK-1.11-scala_2.11
     build: ./images/client-image
     command: "java -classpath /opt/data/data-producer.jar com.ververica.sql_training.data_producer.TaxiRecordProducer --input file /opt/data --output kafka kafka:9092 --speedup 10.0"
     depends_on:
@@ -15,7 +15,7 @@ services:
       KAFKA_BOOTSTRAP: kafka
       MYSQL_HOST: mysql
   jobmanager:
-    image: fhueske/flink-sql-training-flink-s3:1.11.0-scala_2.11
+    image: fhueske/flink-sql-training-flink-s3:1.11.1-scala_2.11
     build: ./images/flink-image
     hostname: "jobmanager"
     expose:
@@ -26,7 +26,7 @@ services:
     environment:
       - JOB_MANAGER_RPC_ADDRESS=jobmanager
   taskmanager:
-    image: fhueske/flink-sql-training-flink-s3:1.11.0-scala_2.11
+    image: fhueske/flink-sql-training-flink-s3:1.11.1-scala_2.11
     build: ./images/flink-image
     expose:
       - "6121"

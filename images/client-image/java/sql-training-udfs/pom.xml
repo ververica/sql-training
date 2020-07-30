@@ -6,10 +6,10 @@
 
     <groupId>com.ververica.sql-training</groupId>
     <artifactId>sql-training-udfs</artifactId>
-    <version>1-FLINK-1.11_2.11</version>
+    <version>2-FLINK-1.11_2.11</version>
 
     <properties>
-        <flink.version>1.11.0</flink.version>
+        <flink.version>1.11.1</flink.version>
     </properties>
 
     <dependencies>
