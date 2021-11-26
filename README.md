@@ -1,3 +1,7 @@
+**⚠️ This repository has been archived. ⚠️**
+
+---
+
 # Apache Flink® SQL Training
 
 **This repository provides a training for Flink's SQL API.**
